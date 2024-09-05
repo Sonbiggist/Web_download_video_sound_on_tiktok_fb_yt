@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TikTok Page and Video Downloader</title>
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
+    <script
+      src="{{ url_for('static', filename='js/scripts.js') }}"
+      defer
+    ></script>
+    <link
+      rel="icon"
+      href="{{ url_for('static', filename='img/favicon.ico') }}"
+      type="image/x-icon"
+    />
+  </head>
+  <body>
+    <div class="edit-button-container">
+      <a href="/adjust" class="edit-button" title="Chuyển sang chỉnh sửa video">
+        <span class="tooltip">Chuyển sang chỉnh sửa video</span>
+        🛠️
+      </a>
+    </div>
+    <h1>TikTok Page Opener</h1>
+    <form action="/open_tiktok" method="post">
+      <label for="user_url">Enter TikTok User URL:</label>
+      <input type="text" id="user_url" name="user_url" required />
+      <button type="submit">Go</button>
+    </form>
+
+    <h1>Video Downloader</h1>
+    <form id="downloadForm" action="/download" method="POST">
+      <label for="video_url">Enter Video URL:</label>
+      <input type="text" id="video_url" name="video_url" required />
+      <button type="button" id="play_button">Play Video</button>
+
+      <br /><br />
+      <label for="option">Select Download Option:</label>
+      <select id="option" name="option">
+        <option value="audio">Download Audio Only</option>
+        <option value="video_no_audio">Download Video (No Audio)</option>
+        <option value="video_audio">Download Full Video</option>
+      </select>
+      <br /><br />
+      <button type="submit">Download</button>
+    </form>
+    <div id="result">
+      {% if download_url %}
+      <p>
+        Download URL:
+        <a href="{{ download_url }}" target="_blank">{{ download_url }}</a>
+      </p>
+      {% elif error %}
+      <p>{{ error }}</p>
+      {% endif %}
+    </div>
+    {% if url %}
+    <script>
+      window.onload = function () {
+        window.open("{{ url }}", "TikTokWindow", "width=800,height=600");
+      };
+    </script>
+    {% endif %} {% if error %}
+    <p style="color: red">{{ error }}</p>
+    {% endif %}
+
+    <!-- Video Modal -->
+    <div id="video_modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <iframe
+          id="video_player"
+          src=""
+          frameborder="0"
+          allow="autoplay; encrypted-media"
+          allowfullscreen
+          style="width: 100%; height: 100%"
+        ></iframe>
+      </div>
+    </div>
+
+    <!-- Nút Play nằm ở góc trên cùng bên phải -->
+    <button id="audio-player">Play</button>
+
+    <!-- Thẻ audio ẩn -->
+    <audio id="audio" autoplay loop>
+      <source
+        src="{{ url_for('static', filename='audio/background.mp3') }}"
+        type="audio/mpeg"
+      />
+      Your browser does not support the audio element.
+    </audio>
+    <div id="overlay">Click anywhere to start the background music</div>
+
+    
+    <div class="footer">
+      <p>
+        Made with ❤️ by
+        <a href="https://github.com/Son_biggest" target="_blank">Xu_son</a>
+      </p>
+    </div>
+  </body>
+</html>
